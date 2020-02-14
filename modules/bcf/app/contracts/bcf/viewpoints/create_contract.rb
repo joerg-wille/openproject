@@ -30,7 +30,7 @@
 
 module Bcf::Viewpoints
   class CreateContract < ::ModelContract
-    include Bcf::Concerns::ManageBcfGuarded
+    include Bcf::ManageBcfGuarded
 
     WHITELISTED_PROPERTIES = %w(guid
                                 index

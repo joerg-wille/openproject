@@ -28,10 +28,12 @@
 # See docs/COPYRIGHT.rdoc for more details.
 #++
 
-module Bcf::Issues
-  class BaseContract < ::ModelContract
-    include Bcf::ManageBcfGuarded
+class Wikis::Diff < Redmine::Helpers::Diff
+  attr_reader :content_to, :content_from
 
-    attribute :index
+  def initialize(content_to, content_from)
+    @content_to = content_to
+    @content_from = content_from
+    super(content_to.data.text, content_from.data.text)
   end
 end
