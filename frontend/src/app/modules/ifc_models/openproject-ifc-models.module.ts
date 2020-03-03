@@ -27,61 +27,54 @@
 // ++
 import {NgModule} from "@angular/core";
 import {OpenprojectWorkPackagesModule} from "core-app/modules/work_packages/openproject-work-packages.module";
-import { Ng2StateDeclaration, UIRouterModule, UIRouter } from '@uirouter/angular';
-import {IFCIndexPageComponent} from "core-app/modules/ifc_models/pages/index/ifc-index-page.component";
+import {UIRouterModule} from '@uirouter/angular';
 import {OpenprojectCommonModule} from "core-app/modules/common/openproject-common.module";
-import { IFCViewerComponent } from './ifc-viewer/ifc-viewer.component';
-
-export const IFC_ROUTES:Ng2StateDeclaration[] = [
-  // TODO: properly namespace the routes e.g. bim.something
-  {
-    name: 'bim_defaults',
-    parent: 'root',
-    url: '/ifc_models/defaults/',
-    component: IFCIndexPageComponent
-  },
-  {
-    name: 'bim_show',
-    parent: 'root',
-    url: '/ifc_models/{model_id:[0-9]+}/',
-    component: IFCIndexPageComponent,
-  }
-];
-
-export function uiRouterIFCConfiguration(uiRouter:UIRouter) {
-  uiRouter.urlService.rules
-    .when(
-      new RegExp("^/projects/(.*)/ifc_models/defaults$"),
-      match => `/projects/${match[1]}/ifc_models/defaults/`
-    );
-
-  uiRouter.urlService.rules
-    .when(
-      new RegExp("^/projects/(.*)/ifc_models/([0-9]+)$"),
-      match => `/projects/${match[1]}/ifc_models/${match[2]}/`
-    );
-}
+import {IFCViewerComponent} from './ifc-viewer/ifc-viewer.component';
+import {IFC_ROUTES} from "core-app/modules/ifc_models/openproject-ifc-models.routes";
+import {IFCViewerPageComponent} from "core-app/modules/ifc_models/pages/viewer/ifc-viewer-page.component";
+import {BCFContainerComponent} from "core-app/modules/ifc_models/bcf/container/bcf-container.component";
+import {EmptyComponent} from "core-app/modules/ifc_models/empty/empty-component";
+import {BimViewToggleButtonComponent} from "core-app/modules/ifc_models/toolbar/view-toggle/bim-view-toggle-button.component";
+import {BimViewToggleDropdownDirective} from "core-app/modules/ifc_models/toolbar/view-toggle/bim-view-toggle-dropdown.directive";
+import {BimManageIfcModelsButtonComponent} from "core-app/modules/ifc_models/toolbar/manage-ifc-models-button/bim-manage-ifc-models-button.component";
+import {IFCViewerService} from "core-app/modules/ifc_models/ifc-viewer/ifc-viewer.service";
+import {BcfSingleViewComponent} from "core-app/modules/ifc_models/bcf/single-view/bcf-single-view.component";
+import {OpenprojectFieldsModule} from "core-app/modules/fields/openproject-fields.module";
 
 @NgModule({
   imports: [
     OpenprojectCommonModule,
+    OpenprojectFieldsModule,
     OpenprojectWorkPackagesModule,
     UIRouterModule.forChild({
-      states: IFC_ROUTES,
-      config: uiRouterIFCConfiguration
+      states: IFC_ROUTES
     })
   ],
   providers: [
+    IFCViewerService
   ],
   declarations: [
     // Pages
-    IFCIndexPageComponent,
+    IFCViewerPageComponent,
 
+    // Regions of pages
+    EmptyComponent,
+    BCFContainerComponent,
+
+    // Toolbar
+    BimManageIfcModelsButtonComponent,
+    BimViewToggleButtonComponent,
+    BimViewToggleDropdownDirective,
+
+    BcfSingleViewComponent,
     IFCViewerComponent
   ],
-  exports: [
-  ],
+  exports: [],
   entryComponents: [
+    // Toolbar,
+    BimViewToggleButtonComponent,
+    BimViewToggleButtonComponent,
+    BimManageIfcModelsButtonComponent,
   ]
 })
 export class OpenprojectIFCModelsModule {
